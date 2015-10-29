@@ -7,7 +7,7 @@
 在`build.sbt`中加入：
 
 ```sbt
-"com.lvxingpai" %% "morphia-play-injector" % "0.1.0"
+"com.lvxingpai" %% "morphia-play-injector" % "0.1.1"
 ```
 
 注意：安装此artifact需要有[Lvxingpai sbt Repository](http://nexus.lvxingpai.com)的访问权限。
