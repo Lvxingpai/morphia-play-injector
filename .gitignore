@@ -15,3 +15,12 @@ server.pid
 *.eml
 /dist/
 .cache
+/RUNNING_PID
+/project/*-shim.sbt
+/project/.*
+/project/credentials.sbt
+
+.idea/*
+activator*
+
+scalastyle-config.xml
