@@ -2,7 +2,7 @@ name := """morphia-play-injector"""
 
 organization := "com.lvxingpai"
 
-version := "0.1.1"
+version := "0.1.3-SNAPSHOT"
 
 crossScalaVersions := "2.10.4" :: "2.11.4" :: Nil
 
