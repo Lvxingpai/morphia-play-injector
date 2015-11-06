@@ -3,8 +3,11 @@ package com.lvxingpai.inject.morphia
 import javax.inject.{ Inject, Provider, Singleton }
 
 import com.lvxingpai.database.MorphiaFactoryImpl
+import com.typesafe.config.ConfigValueFactory
 import play.api.Configuration
 import play.api.inject.{ BindingKey, Injector }
+
+import scala.collection.JavaConversions._
 
 /**
  * Created by zephyre on 10/30/15.
@@ -31,14 +34,30 @@ class MorphiaProvider extends Provider[MorphiaMap] {
       val mongoConfig = conf getConfig s"morphiaPlay.mongo.$name" getOrElse Configuration.empty
 
       val database = mongoConfig getString "database" getOrElse "local"
-      val host = mongoConfig getString "host" getOrElse "localhost"
-      val port = mongoConfig getInt "port" getOrElse 27017
+
+      // 获得复制集的入口
+      val containerKey = "container"
+      val defaultConfig = Configuration(mongoConfig.underlying atKey containerKey)
+
+      // 可能的复制集
+      val replicaConf = (mongoConfig getList "servers" getOrElse ConfigValueFactory.fromIterable(Seq())).toSeq map
+        (v => Configuration(v atKey containerKey))
+
+      val serverAddresses = (replicaConf :+ defaultConfig) map (conf => {
+        for {
+          host <- conf getString s"$containerKey.host"
+          port <- conf getInt s"$containerKey.port"
+        } yield {
+          host -> port
+        }
+      }) filter (_.nonEmpty) map (_.get)
+
       val user = mongoConfig getString "user"
       val password = mongoConfig getString "password"
       val adminSource = mongoConfig getString "adminSource"
       val validation = mongoConfig getBoolean "validation" getOrElse false
 
-      val ds = MorphiaFactoryImpl.newInstance(host, port, database, adminSource, user, password, validation = validation)
+      val ds = MorphiaFactoryImpl.newInstance(serverAddresses, database, adminSource, user, password, validation = validation)
       name -> ds
     })
 
