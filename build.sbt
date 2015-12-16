@@ -2,7 +2,7 @@ name := """morphia-play-injector"""
 
 organization := "com.lvxingpai"
 
-version := "0.1.1"
+version := "0.1.3-SNAPSHOT"
 
 crossScalaVersions := "2.10.4" :: "2.11.4" :: Nil
 
@@ -12,7 +12,7 @@ val morphiaVersion = "1.0.1"
 libraryDependencies ++= Seq(
   cache,
   "org.scalatest" %% "scalatest" % "2.2.4" % "test",
-  "com.lvxingpai" %% "morphia-factory" % "0.1.2",
+  "com.lvxingpai" %% "morphia-factory" % "0.2.0",
   "org.mongodb.morphia" % "morphia" % morphiaVersion,
   "org.mongodb.morphia" % "morphia-validation" % morphiaVersion
 )
